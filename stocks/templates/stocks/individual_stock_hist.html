@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ stock_ticker }} Volume histogram</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>{{ stock_ticker }} Volume histogram</h1>
+    <div>{{ plot_div|safe }}</div>
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+</body>

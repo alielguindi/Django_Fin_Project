@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ stock.ticker }} Details</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">{{ stock.ticker }} Stock Details</h1>
+            <div class="box">
+                <h2 class="subtitle">Basic Information</h2>
+                <p><strong>Ticker:</strong> {{ stock.ticker }}</p>
+                <p><strong>Currency:</strong> {{ stock.currency }}</p>
+                <p><strong>Last Updated:</strong> {{ stock.last_date }}</p>
+                <p><strong>Last Price:</strong> {{ stock.last_price }}</p>
+            </div>
+            <div class="box">
+                <h2 class="subtitle">Price History</h2>
+                <table class="table is-striped is-hoverable is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for price in stock.prices.all %}
+                            <tr>
+                                <td>{{ price.date }}</td>
+                                <td>{{ price.close_price }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="2">No price history available.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

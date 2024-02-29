@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock List</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma-rtl.min.css">
+    <style>
+        /* Add custom CSS here */
+        h1 {
+            margin-bottom: 20px; /* Adjust the space by changing this value */
+        }
+    </style>
+</head>
+<body>
+<strong>Click on the Stock ticker in the first column</strong> to get the Historical prices from<strong> Oct. 3, 2023, until Feb. 26, 2024</strong> 
+
+<h1><button class="button is-primary"><a href="{% url 'about-project'%}" class="has-text-white">About the project</a></button></h1>
+<h1><button class="button is-primary"><a href="{% url 'stock-plot'  %}" class="has-text-white">Click to display the historical Plots for all Stocks</a></button></h1>
+<h1><button class="button is-primary"><a href="{% url 'investment-add'%}" class="has-text-white">Click to create your portfolio</a></button></h1>
+<table class="table is-striped is-fullwidth">
+    <thead>
+        <tr>
+            <th>Stock Ticker</th>
+            <th>Currency</th>
+            <th>Last Date</th>
+            <th>Last Price</th>
+            <th>Last Volume</th>
+            <th>Historical close price plot</th>
+            <th>Histogram for volume traded</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for stock in stocks %}
+            <tr>
+                <!--<td>{{ stock.ticker }}</td>-->
+                <td><a href="{% url 'get_stock_data' stock.ticker %}">{{ stock.ticker}}</a></td>
+                <td>{{ stock.currency }}</td>
+                <td>{{ stock.last_date }}</td>
+                <td>{{ stock.last_price }}</td>
+                <td>{{ stock.last_volume }}</td>
+                <td><button class="button is-primary"><a href="{% url 'stock_plot' stock.ticker %}" class="has-text-white">Click</a></button></td>
+                <td><button class="button is-primary"><a href="{% url 'stock_hist' stock.ticker %}" class="has-text-white">Click</a></button></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>
