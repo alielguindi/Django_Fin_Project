@@ -31,5 +31,8 @@ class GetStockData(DetailView):
     context_object_name = "stock"
 
     def get_object(self):
-        ticker = self.kwargs.get("ticker")
-        return get_object_or_404(Stock, ticker=ticker)    
+        pk= self.kwargs.get("pk")
+        return get_object_or_404(Stock, pk=pk)    
+    
+
+      
