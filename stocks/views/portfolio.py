@@ -26,3 +26,30 @@ class PortfolioCreate(CreateView) :
         form.instance.user = self.request.user
         return super().form_valid(form)
     
+
+
+#
+
+
+class PlotPortfolioEqWeighted(View) :
+    def get(self,request ,*args, **kwargs)  :
+        qs = Price.objects.values("stock__ticker","date","close_price")
+        df = pd.DataFrame(qs)    
+        df= df.pivot(index = "date",columns = "stock__ticker", values = "close_price")    
+        n = len(df.columns)
+        df["equally_weighted"]= (df[df.columns] *1/n).sum(axis =1)
+        df["returns"] = df["equally_weighted"].pct_change(1)
+
+
+        trace = go.Scatter(x= df.index, y = df["equally_weighted"], mode = "lines")
+        layout = go.Layout(title ="Close prices for an Equally weighted portfolio", xaxis=dict(title='Date'), yaxis=dict(title='Close Price'))
+        fig= go.Figure(data = [trace], layout=layout)
+        plot_div = plot(fig, output_type='div', include_plotlyjs=False)
+
+ 
+    
+
+        return render(request, "stocks/equally_weighted.html", {"plot_div" : plot_div})        
+
+
+
