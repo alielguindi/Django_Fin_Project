@@ -42,6 +42,28 @@ class Stock(models.Model) :
             pass
 
         return last_price_details
+    
+
+    def fetch_data(self):
+        
+        api_key = settings.ALPHA_VINTAGE_API_KEY
+        url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={self.ticker}&apikey={api_key}'
+
+        r = requests.get(url)
+        data = r.json()
+
+        time_series = data.get("Time Series (Daily)")
+        if time_series:
+            for date, daily_data in time_series.items():
+                Price.objects.update_or_create(
+                    stock=self,
+                    date=date,
+                    defaults={
+                        "close_price": daily_data.get("4. close"),
+                        "volume": daily_data.get("5. volume")
+                    }
+                )
+
 
 
 
