@@ -1,7 +1,11 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from .views import StockListView, GetStockData, StockPlotView, StockPriceGraphView, StockHistView, PortfolioCreate, AboutProject
+from .views.plots import StockPlotView, StockPriceGraphView, StockHistView
+from .views.stocks_list import StockListView, GetStockData
+from .views.portfolio import PortfolioCreate
+from .views.about import AboutProject
+
 
 
 urlpatterns = [
@@ -13,9 +17,6 @@ urlpatterns = [
     path('hist/<str:stock_ticker>/', StockHistView.as_view(), name='stock_hist'),
     path('add_investment', PortfolioCreate.as_view(), name ="investment-add" ),
     path('about/', AboutProject.as_view(), name = "about-project"),
-
-
-    # path('add-investment/', views.AddInvestment.as_view(), name='add-investment'),
 ]
 
 

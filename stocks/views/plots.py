@@ -1,3 +1,7 @@
+'''
+py File that groupy all plots views
+
+'''
 from typing import Any
 from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
@@ -6,9 +10,8 @@ from stocks.models.stock import Stock
 from stocks.models.price import Price
 from stocks.models.portfolio import Portfolio
 from stocks.models.investment import Investment
-from django.db.models import Prefetch
 from django.views.generic import View
-from .models import Stock, Price
+
 import plotly.graph_objs as go
 from plotly.offline import plot
 import pandas as pd
@@ -16,28 +19,6 @@ from django.shortcuts import render, get_object_or_404
 #from .forms import InvestmentForm
 from django.views.generic import ListView, DetailView, CreateView
 
-#Django offers a variety of generic class-based views for common web development tasks. 
-#Each is designed to handle specific types of operations, such as displaying a single object, handling forms, 
-#or editing objects. Here are some of the commonly used generic class-based views:
-
-#Check https://docs.djangoproject.com/en/5.0/topics/class-based-views/generic-display/ for class based views where you can instantiate from
-
-
-class StockListView(ListView) :
-    model = Stock  # Specify the model we want to work with
-    template_name = "stocks/stock_list_view.html" # Specify your template name
-    context_object_name = "stocks" #Your context name to use in the template
-    
-
-
-class GetStockData(DetailView):
-    model = Stock
-    template_name = "stocks/stock_individual.html"
-    context_object_name = "stock"
-
-    def get_object(self):
-        ticker = self.kwargs.get("ticker")
-        return get_object_or_404(Stock, ticker=ticker)
 
 
 
@@ -107,38 +88,3 @@ class StockHistView(View) : #Histogram for each of the stocks
         
         else :
             return render(request, "stocks/individual_stock_hist.html", {"error" : "No price date available for this stock"})
-
-
-
-class PortfolioCreate(CreateView) :
-    model = Investment
-    fields = ["stock","date","share"]
-    
-    
-
-    def form_valid(self, form) :
-        form.instance.user = self.request.user
-        return super().form_valid(form)
-    
-
-
-
-
-class AboutProject(View) :
-    def get(self,request, *args,**kwargs) :
-        return render(request, "stocks/about.html")
-
-
-
-
-
-#We should be having a view for each of the portfolios :
-# 1) Name
-# 2) Date of creation
-# 3) It's total value
-#-> This will be put in a seperate redirection.
-
-#Wrapping up pour demain : 
-# finir le souci de error de date field
-# then finishing the form and then add it to a view to visualize this  : Name, Date of starting investing, total value of the portfolio. could be rediorected from
-#the main page 
