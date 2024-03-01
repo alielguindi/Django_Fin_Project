@@ -34,9 +34,9 @@
                 <!--<td>{{ stock.ticker }}</td>-->
                 <td><a href="{% url 'get_stock_data' stock.ticker %}">{{ stock.ticker}}</a></td>
                 <td>{{ stock.currency }}</td>
-                <td>{{ stock.last_date }}</td>
-                <td>{{ stock.last_price }}</td>
-                <td>{{ stock.last_volume }}</td>
+                <td>{{ stock.last_price_details.last_date }}</td>
+                <td>{{ stock.last_price_details.last_price }}</td>
+                <td>{{ stock.last_price_details.last_volume }}</td>
                 <td><button class="button is-primary"><a href="{% url 'stock_plot' stock.ticker %}" class="has-text-white">Click</a></button></td>
                 <td><button class="button is-primary"><a href="{% url 'stock_hist' stock.ticker %}" class="has-text-white">Click</a></button></td>
             </tr>

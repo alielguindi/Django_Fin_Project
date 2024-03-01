@@ -15,34 +15,32 @@ class Stock(models.Model) :
     def __str__(self) :
         return f'{self.ticker}'
      
-    
-    #Getting the last_price for each instance of Stock
-    @property
-    def last_price(self) -> models.DecimalField | None :
-        try :
-            last_price = self.prices.latest("date").close_price   #self.related_name.latest(date).close_price
-        except Price.DoesNotExist :
-            last_price = None 
 
-        return last_price
 
     @property
-    def last_date(self) -> models.DecimalField | None :
-        try :
-            last_date = self.prices.latest("date").date   #self.related_name.latest(date).close_price
-        except Price.DoesNotExist :
-            last_date = None 
+    def last_price_details(self):
+        # Initialize default values for price details
+        last_price_details = {
+            'last_price': None,
+            'last_date': None,
+            'last_volume': None
+        }
 
-        return last_date
-    
-    @property 
-    def last_volume(self) -> models.IntegerField | None :
-        try :
-            last_volume = self.prices.latest("date").volume  #self.related_name.latest(date).close_price
-        except Price.DoesNotExist :
-            last_volume = None 
+        try:
+            # Fetch the latest Price instance related to this Stock
+            latest_price = self.prices.latest("date")
 
-        return last_volume
-    
+            # Update the details using the latest Price instance
+            last_price_details.update({
+                'last_price': latest_price.close_price,
+                'last_date': latest_price.date,
+                'last_volume': latest_price.volume,
+            })
+        except Price.DoesNotExist:
+            # If no Price instance exists, the defaults remain None
+            pass
+
+        return last_price_details
+
 
 
