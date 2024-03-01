@@ -50,8 +50,16 @@ class Migration(migrations.Migration):
                 ('value', models.DecimalField(decimal_places=2, default=0, max_digits=10)),
                 ('portfolio', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='investments', to='stocks.portfolio')),
                 ('stock', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='investments', to='stocks.stock')),
+             
+                
                 
                
             ],
+        ),
+
+        migrations.AlterField(
+            model_name='investment',
+            name='date',
+            field=models.DateField(),
         ),
     ]
