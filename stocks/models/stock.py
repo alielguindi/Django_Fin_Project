@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User #Not explicitly defined in models.py
 from datetime import date
 from stocks.models.price import Price
+import requests
 
 
 #Create your models here.
@@ -44,6 +45,7 @@ class Stock(models.Model) :
         return last_price_details
     
 
+    @classmethod
     def fetch_data(self):
         
         api_key = settings.ALPHA_VINTAGE_API_KEY
