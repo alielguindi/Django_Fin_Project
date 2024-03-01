@@ -1,7 +1,11 @@
 from typing import Any
 from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
-from .models import Stock, Price, Portfolio, Investment
+#from stocks.models import Stock, Price, Portfolio, Investment
+from stocks.models.stock import Stock
+from stocks.models.price import Price
+from stocks.models.portfolio import Portfolio
+from stocks.models.investment import Investment
 from django.db.models import Prefetch
 from django.views.generic import View
 from .models import Stock, Price
@@ -23,6 +27,7 @@ class StockListView(ListView) :
     model = Stock  # Specify the model we want to work with
     template_name = "stocks/stock_list_view.html" # Specify your template name
     context_object_name = "stocks" #Your context name to use in the template
+    
 
 
 class GetStockData(DetailView):
@@ -47,11 +52,27 @@ class StockPlotView(View): #Line plot for a given stock
             layout = go.Layout(title=f'Close Prices for {stock_ticker} over Time', xaxis=dict(title='Date'), yaxis=dict(title='Close Price'))
             fig = go.Figure(data=[trace], layout=layout)
             plot_div = plot(fig, output_type='div', include_plotlyjs=False)
-            return render(request, "stocks/individual_stock_plot.html", {"plot_div": plot_div})
+            mean_price = df['close_price'].mean()
+            median_price = df['close_price'].median()
+            #std_dev = df['close_price'].std()
+            max_price = df['close_price'].max()
+            min_price = df['close_price'].min()
+
+
+             # Add statistics to the context
+            context = {
+                "plot_div": plot_div,
+                "mean_price": mean_price,
+                "median_price": median_price,
+                #"std_dev": std_dev,
+                "max_price": max_price,
+                "min_price": min_price,
+            }
+            return render(request, "stocks/individual_stock_plot.html", context)
         else:
             # Handle case where there are no prices available for the stock
             return render(request, "stocks/individual_stock_plot.html", {"error": "No price data available for this stock."})
-
+        
 
 
 class StockPriceGraphView(View) :#Line plot for all stocks
@@ -107,7 +128,8 @@ class AboutProject(View) :
     def get(self,request, *args,**kwargs) :
         return render(request, "stocks/about.html")
 
-        
+
+
 
 
 #We should be having a view for each of the portfolios :
@@ -116,7 +138,7 @@ class AboutProject(View) :
 # 3) It's total value
 #-> This will be put in a seperate redirection.
 
-# There is a bug demande a Loic/Fabio
-    
-
-
+#Wrapping up pour demain : 
+# finir le souci de error de date field
+# then finishing the form and then add it to a view to visualize this  : Name, Date of starting investing, total value of the portfolio. could be rediorected from
+#the main page 

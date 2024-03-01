@@ -8,6 +8,14 @@
 <body>
     <h1>{{ stock_ticker }} Stock Prices Graph</h1>
     <div>{{ plot_div|safe }}</div>
+    <!-- Display statistics -->
+<div>
+    <p>Mean Price: {{ mean_price }}</p>
+    <p>Median Price: {{ median_price }}</p>
+    <p>Standard Deviation: {{ std_dev }}</p>
+    <p>Maximum Price: {{ max_price }}</p>
+    <p>Minimum Price: {{ min_price }}</p>
+</div>
     {% if error %}
         <p>{{ error }}</p>
     {% endif %}
