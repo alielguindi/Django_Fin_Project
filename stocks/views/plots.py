@@ -21,16 +21,16 @@ from django.views.generic import ListView, DetailView, CreateView
 
 
 
-
 class StockPlotView(View): #Line plot for a given stock
-    def get(self, request, stock_ticker):
-        stock = get_object_or_404(Stock, ticker=stock_ticker)
-        prices = Price.objects.filter(stock__ticker=stock).order_by('date').values('date', 'close_price')
+    def get(self, request, pk):
+        stock = get_object_or_404(Stock, pk=pk)
+        
+        prices = Price.objects.filter(stock=stock).order_by('date').values('date', 'close_price')
         df = pd.DataFrame(list(prices))
         
         if not df.empty:
-            trace = go.Scatter(x=df['date'], y=df['close_price'], mode="lines", name=stock_ticker)
-            layout = go.Layout(title=f'Close Prices for {stock_ticker} over Time', xaxis=dict(title='Date'), yaxis=dict(title='Close Price'))
+            trace = go.Scatter(x=df['date'], y=df['close_price'], mode="lines")
+            layout = go.Layout(title=f'Close Prices for over Time', xaxis=dict(title='Date'), yaxis=dict(title='Close Price'))
             fig = go.Figure(data=[trace], layout=layout)
             plot_div = plot(fig, output_type='div', include_plotlyjs=False)
             mean_price = df['close_price'].mean()
@@ -74,8 +74,8 @@ class StockPriceGraphView(View) :#Line plot for all stocks
 
 
 class StockHistView(View) : #Histogram for each of the stocks
-    def get(self,request,stock_ticker) :
-        stock = get_object_or_404(Stock, ticker = stock_ticker) # __str__
+    def get(self,request,pk) :
+        stock = get_object_or_404(Stock, pk=pk) # __str__
         qs = Price.objects.filter(stock__ticker = stock).order_by("date").values("date","volume")
         df = pd.DataFrame(qs)
         if not df.empty :
